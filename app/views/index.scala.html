@@ -1,7 +1,14 @@
 @(message: String)
-
 @main("Welcome to Play") {
 
-    @welcome(message, style = "scala")
 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-lg-12 box">
+                <h2>@message</h2>
+            </div>
+        </div>
+    </div>
+
+    <script src="@routes.Assets.versioned("javascripts/index.js")" type="text/javascript"></script>
 }
