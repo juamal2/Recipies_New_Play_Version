@@ -2,9 +2,9 @@ package models
 
 import play.api.libs.json.OFormat
 
-case class Note (subject: String, message :String){
 
-}
+
+case class Note (subject: String, message :String)
 
 object JsonFormats {
   import play.api.libs.json.Json

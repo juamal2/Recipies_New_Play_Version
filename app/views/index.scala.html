@@ -1,7 +1,7 @@
 @(message: String)
 @main("Welcome to Play") {
 
-
+    @for(a <- 0 until 3){
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-lg-12 box">
@@ -9,6 +9,8 @@
             </div>
         </div>
     </div>
+    }
 
-    <script src="@routes.Assets.versioned("javascripts/index.js")" type="text/javascript"></script>
+
+    <script src="@routes.Assets.at("javascripts/index.js")" type="text/javascript"></script>
 }
