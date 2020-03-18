@@ -2,6 +2,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /                           controllers.HomeController.index(text:String ?= "HelloWorld")
 GET     /createNote                 controllers.NoteController.createNote
 GET     /notes                      controllers.NoteController.readAllNotes
-DELETE  /notes                      controllers.NoteController.removeNote(subject:String ?= "")
-POST    /createNoteFromJson         controllers.NoteController.createNoteFromJason
+DELETE  /DeletNoteFromJson          controllers.NoteController.removeNoteFromJson
+POST    /updateNoteFromJson         controllers.NoteController.updateNoteFromJson
+POST    /createNoteFromJson         controllers.NoteController.createNoteFromJson
 

@@ -33,23 +33,28 @@ class NoteController @Inject()(
     futureResult.map(_ => Ok("Note added"))
   }
 
-  def createNoteFromJason: Action[JsValue] = Action.async(parse.json) { request =>
+  def createNoteFromJson: Action[JsValue] = Action.async(parse.json) { request =>
     request.body.validate[Note].map { note =>
       collection.flatMap(_.insert.one(note)).map{_ => Ok("note has been inserted")
       }
     }.getOrElse(Future.successful(BadRequest("invalid Json")))
   }
 
-  def removeNote(subject : String): Action[AnyContent] = Action.async{
-    val result  = collection.map{
-      _.findAndRemove(Json.obj("subject" -> subject))
-    }
-    result.map{_ => Ok("Success")}
+  def removeNoteFromJson: Action[JsValue] = Action.async(parse.json){ request =>
+    request.body.validate[Note].map { note =>
+      collection.flatMap(c => c.remove(note)).map{_ => Ok("removed")
+      }
+    }.getOrElse(Future.successful(BadRequest("invalid Json")))
   }
-  def updateNoteFromJason: Action[JsValue] = Action.async(parse.json) { request =>
-    request.body.validate[Note].map {
-
-    }  }
+  def updateNoteFromJson: Action[JsValue] = Action.async(parse.json) { request =>
+    request.body.validate[Note].map { note =>
+      collection.flatMap{_.findAndUpdate(Json.obj("subject" -> note.subject),
+        Json.obj("message" -> note.message)).
+        map{_ => Ok("note has been updated")
+        }
+      }
+    }.getOrElse((Future.successful(BadRequest("invalid Json"))))
+  }
 
   def readAllNotes: Action[AnyContent] = Action.async {
     val cursor: Future[Cursor[Note]] = collection.map{
