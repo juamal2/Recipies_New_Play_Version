@@ -1,16 +1,33 @@
-@(message: String)
+@(message: String, noteList: List[Note])
 @main("Welcome to Play") {
 
-    @for(a <- 0 until 3){
-    <div class="container-fluid">
+
+    <div class="container-fluid" style="padding-bottom: 20px">
         <div class="row">
             <div class="col-sm-12 col-lg-12 box">
                 <h2>@message</h2>
             </div>
         </div>
     </div>
-    }
+     <div class="container-fluid ">
+        <div class="row" >
+                @for(note <- (noteList)){
+                     <div class="card text-white bg-info" style="width: 18rem; margin: 50px">
+                         <div class = "card-header justify-content-between row " >
+                        <h3 class = "  ">@note.subject</h3>
+                         <a  href="" class="   btn btn-primary">Button</a>
+                        </div>
+                     <div class="card-body">
+                        <p class = card-text">@note.message</p>
+                     </div>
+                     </div>
+                }
+        </div>
+    </div>
+
+
 
 
     <script src="@routes.Assets.at("javascripts/index.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("stylesheets/notes.css")" type="text/javascript"></script>
 }

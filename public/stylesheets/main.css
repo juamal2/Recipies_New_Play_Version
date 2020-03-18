@@ -126,3 +126,19 @@ form dl{padding:10px 0;}
 dd.info{color:#888;font-size:12px;}
 dd.error{color:#c00;}
 aside a[href^="http"]:after,.doc a[href^="http"]:after{content:url(/assets/images/external.png);vertical-align:middle;margin-left:5px;}
+
+#note{
+    text-align: center;
+    background-color: #ffc325;
+    width: 300px;
+    border-radius: 8px;
+    border: 6px solid #F5D899;
+    border-top: 10px solid #6f8db7;
+}
+#noteText{
+    text-align: end;
+}
+.card{
+    padding-left: 13px;
+    padding-right: 13px;
+}

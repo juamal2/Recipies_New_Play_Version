@@ -3,7 +3,7 @@ package controllers
 import javax.inject.Inject
 import models.JsonFormats._
 import models.Note
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.{JsValue, Json, OFormat}
 import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents}
 import play.modules.reactivemongo.{MongoController, ReactiveMongoApi, ReactiveMongoComponents}
 import reactivemongo.api.Cursor
@@ -26,15 +26,15 @@ class NoteController @Inject()(
   def collection: Future[JSONCollection] = database.map(_.collection[JSONCollection]("notes"))
 
 
-
-  def createNote: Action[AnyContent] = Action.async {
-    val note = Note("juamal", "get notes working")
+  def create: Action[AnyContent] = Action.async {
+    val note = Note("juamal" , "hello")
     val futureResult = collection.flatMap(_.insert.one(note))
-    futureResult.map(_ => Ok("Note added"))
+    futureResult.map(_ => Ok("User inserted"))
   }
 
-  def createNoteFromJson: Action[JsValue] = Action.async(parse.json) { request =>
-    request.body.validate[Note].map { note =>
+
+  def createNoteFromJson: Action[JsValue] = Action.async(parse.json) {
+    request => request.body.validate[Note].map { note =>
       collection.flatMap(_.insert.one(note)).map{_ => Ok("note has been inserted")
       }
     }.getOrElse(Future.successful(BadRequest("invalid Json")))
@@ -46,14 +46,11 @@ class NoteController @Inject()(
       }
     }.getOrElse(Future.successful(BadRequest("invalid Json")))
   }
-  def updateNoteFromJson: Action[JsValue] = Action.async(parse.json) { request =>
-    request.body.validate[Note].map { note =>
-      collection.flatMap{_.findAndUpdate(Json.obj("subject" -> note.subject),
-        Json.obj("message" -> note.message)).
-        map{_ => Ok("note has been updated")
-        }
+  def updateNoteFromJson(message:String): Action[JsValue] = Action.async(parse.json) {
+    request => request.body.validate[Note].map { note =>
+      collection.flatMap(c => c.update.one(note, Json.obj("subject"-> note.subject, "message" -> message), upsert = false)).map{_ => Ok("updated")
       }
-    }.getOrElse((Future.successful(BadRequest("invalid Json"))))
+    }.getOrElse(Future.successful(BadRequest("invalid Json")))
   }
 
   def readAllNotes: Action[AnyContent] = Action.async {
@@ -75,7 +72,7 @@ class NoteController @Inject()(
   }
 
 
-
+Format: OFormat[Note]
 
 
 
